@@ -1,0 +1,10 @@
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/secure
+maxretry = 5
+bantime = 86400
+backend = systemd
+action = iptables-multiport[name=SSH, port=ssh, protocol=tcp]
+         etcd[name=SSH]
