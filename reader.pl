@@ -4,11 +4,14 @@ use strict;
 use JSON;
 use LWP::Simple;
 my $ua = LWP::UserAgent->new;
-my $url = 'https://url';
-my ($login_url, $realm, $user, $pass) = ("url.domain.here:443", "Blacklist", "etcd", "bl0cked");
+my $url = 'url.domain.here';
+my ($login_url, $realm, $user, $pass) = ("$url:443", "Blacklist", "etcduser", "bl0cked4u");
 $ua->credentials($login_url, $realm, $user, $pass);
-my $json = $ua->get( $url );
-my $decode = decode_json($json->content);
+my $resp = $ua->get( 'https://' . $url );
+if (! $resp->is_success) {
+ die "Invalid response\n$resp->decoded_content";
+}
+my $decode = decode_json($resp->content);
 
 for my $ip (@{$decode}) {
  system("fail2ban-client set sshd banip $ip");
