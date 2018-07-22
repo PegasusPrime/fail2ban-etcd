@@ -9,7 +9,7 @@ my $req = HTTP::Request->new( GET => "https://$url:443/url");
 $req->authorization_basic( "etcd", "bl0cked4u" );
 my $resp = $ua->request($req);
 if (! $resp->is_success) {
- die "Invalid response\n$resp->decoded_content";
+ die "Invalid response\n", $resp->decoded_content();
 }
 my $decode = decode_json($resp->content);
 
