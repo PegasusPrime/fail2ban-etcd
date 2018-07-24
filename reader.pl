@@ -13,10 +13,11 @@ if (! $resp->is_success) {
   die "Invalid response\n", $resp->decoded_content();
 }
 my $decode = decode_json($resp->content);
-
+my $count = 0;
 openlog('reader.pl', 'cons,pid', 'user');
 for my $ip (@{$decode}) {
   system("fail2ban-client set sshd banip $ip");
-  syslog('info',"Added $ip to fail2ban");
+  $count++;
 }
+syslog('info',"Added $count IPs to fail2ban");
 closelog();
